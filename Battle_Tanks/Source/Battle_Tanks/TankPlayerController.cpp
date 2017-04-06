@@ -26,11 +26,22 @@ void ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	AimAtCrossHair();
-	UE_LOG(LogTemp, Warning, TEXT("Tick!"));
 
 }
 
 void ATankPlayerController::AimAtCrossHair()
 {
 	if (!GetControlledTank()){return;}
+
+	FVector HitLocation; // out parameter
+	if (GetSightRayHitLocation(HitLocation))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *HitLocation.ToString());
+	}
+}
+
+bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const
+{
+	HitLocation = FVector (1.0f,1.0f,1.0f);
+	return true;
 }
