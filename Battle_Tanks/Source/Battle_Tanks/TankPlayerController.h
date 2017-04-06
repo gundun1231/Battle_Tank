@@ -23,4 +23,9 @@ public:
 	//return an out paramter, true if landscape is hit.
 	bool GetSightRayHitLocation(FVector& HitResult) const;//does it need to be const?
 
+	UPROPERTY(EditAnywhere)
+	float CrossHairLocationX = 0.5;
+	
+	UPROPERTY(EditAnywhere)
+	float CrossHairLocationY = 0.33333;
 };
