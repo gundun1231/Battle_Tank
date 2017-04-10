@@ -36,7 +36,7 @@ void ATankPlayerController::AimAtCrossHair()
 	FVector HitLocation; // out parameter
 	if (GetSightRayHitLocation(HitLocation))
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("Look Direction: %s"), *HitLocation.ToString());
+		UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *HitLocation.ToString());
 	}
 }
 
@@ -52,20 +52,43 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const
 	if (GetLookDirection(ScreenLocation, LookDirection))
 
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Look Direction: %s"), *LookDirection.ToString());
-
+		//line trace along that look direction, and see what we hit.
+		GetLookVectorHitLocation(LookDirection,HitLocation);
 	}
-	//line trace along that look direction, and see what we hit.
 	return true;
 }
 
 bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector LookDirection) const
 {
 	FVector CameraWorldLocation;
-	DeprojectScreenPositionToWorld(
+	return DeprojectScreenPositionToWorld(
 		ScreenLocation.X,
 		ScreenLocation.Y,
 		CameraWorldLocation,
 		LookDirection
 	);
+	
+}
+
+bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const
+{
+	FHitResult HitResult;
+	const FVector Start = PlayerCameraManager->GetCameraLocation();
+	const FVector End = Start + (LookDirection*LineTraceRange);
+
+	if (GetWorld()->LineTraceSingleByChannel
+	(
+		HitResult,
+		Start,
+		End,
+		ECollisionChannel::ECC_Visibility
+	))
+	{ // if line trace hits a visible object, assign the HitLocation to the 
+		HitLocation = HitResult.Location;
+		return true;
+	}
+	//if line trace does not detect a visible object (skybox is not considered visible), assign hit location 0
+	HitLocation = FVector(0);
+	return false;
+	
 }
