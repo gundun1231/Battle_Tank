@@ -25,7 +25,7 @@ private:
 	//return an out paramter, true if landscape is hit.
 	bool GetSightRayHitLocation(FVector& HitResult) const;//does it need to be const?
 
-	bool GetLookDirection(FVector2D ScreenLocation, FVector LookDirection) const;
+	bool GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const;//& uses the same variable, pass by value is a copy of the variable!
 
 	bool GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const;
 
