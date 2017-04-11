@@ -12,6 +12,20 @@ ATank* ATankAIController::TargetPlayerController() const
 	auto PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
 	return Cast<ATank>(PlayerPawn);
 }
+void ATankAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	if (TargetPlayerController())
+	{
+		//TODO move towards the player.
+		//aim at player 
+		GetAIControlled()->AimAt(TargetPlayerController()->GetActorLocation());
+		///FVector HitLocation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
+		///AIAimAt(HitLocation);
+		//fire if ready
+	}
+}
+
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -25,4 +39,9 @@ void ATankAIController::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("AI Controller is targetting %s"), *(AI_Targetter->GetName()));
 	}
 }
-
+/*
+void ATankAIController::AIAimAt(FVector HitLocation)
+{
+	auto AITankName = GetName();
+	UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *AITankName, *HitLocation.ToString());
+}*/

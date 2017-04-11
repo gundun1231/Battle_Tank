@@ -5,9 +5,7 @@
 #include "AIController.h"
 #include "TankAIController.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class BATTLE_TANKS_API ATankAIController : public AAIController
 {
@@ -17,5 +15,7 @@ private:
 	ATank* TargetPlayerController() const;
 public:
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
+///	void AIAimAt(FVector HitLocation);///
 	
 };
