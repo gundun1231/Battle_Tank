@@ -1,5 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
+//unified methods for both AI controlled and player controlled tanks
 #include "Battle_Tanks.h"
 #include "Tank.h"
 
