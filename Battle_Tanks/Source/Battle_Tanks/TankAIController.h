@@ -16,6 +16,6 @@ private:
 public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
-///	void AIAimAt(FVector HitLocation);///
+	void AIAimAt(FVector HitLocation);///
 	
 };

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-
+#include "TankAimingComponent.h"
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
@@ -15,6 +15,7 @@ public:
 	ATank();
 	void AimAt(FVector HitLocation);
 protected:
+	UTankAimingComponent* TankAimingComponent = nullptr;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
