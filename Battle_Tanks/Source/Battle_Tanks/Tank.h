@@ -14,6 +14,9 @@ public:
 	// Sets default values for this pawn's properties
 	ATank();
 	void AimAt(FVector HitLocation);
+
+	UPROPERTY(EditAnywhere)
+		float LaunchSpeed = 100000;//Launch Speed starting: 1000m/s
 protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
 	// Called when the game starts or when spawned
