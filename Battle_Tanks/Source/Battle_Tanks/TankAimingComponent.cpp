@@ -35,7 +35,29 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
-	UE_LOG(LogTemp, Warning, TEXT("LaunchSpeed: "), LaunchSpeed);
+	if (!Barrel) { return; }
+	FVector OutLaunchVelocity;
+	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
+	float CollisionRad = 0;//5m Collision radius? // TODO make a sensible collision radius
+	auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+
+	
+	if (UGameplayStatics::SuggestProjectileVelocity
+			(
+				this,
+				OutLaunchVelocity,
+				StartLocation,
+				HitLocation,//where we want the porjectile to end up
+				LaunchSpeed,
+				false,
+				CollisionRad,
+				0,
+				ESuggestProjVelocityTraceOption::DoNotTrace//do not line trace
+			)
+		)//calculate the outlaunchvelocity
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AimDirection : %s"), *AimDirection.ToString());
+	}//if no solution found do nothing
 }
 
 void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet)
