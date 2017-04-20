@@ -15,52 +15,47 @@ UTankAimingComponent::UTankAimingComponent()
 }
 
 
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
-{
-	Super::BeginPlay();
 
-	// ...
-	
-}
-
-
-// Called every frame
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
 	if (!Barrel) { return; }
 	FVector OutLaunchVelocity;
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
-	float CollisionRad = 0;//5m Collision radius? // TODO make a sensible collision radius
-	auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 
-	
-	if (UGameplayStatics::SuggestProjectileVelocity
-			(
-				this,
-				OutLaunchVelocity,
-				StartLocation,
-				HitLocation,//where we want the porjectile to end up
-				LaunchSpeed,
-				false,
-				CollisionRad,
-				0,
-				ESuggestProjVelocityTraceOption::DoNotTrace//do not line trace
-			)
-		)//calculate the outlaunchvelocity
+	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity
+	(
+		this,
+		OutLaunchVelocity,
+		StartLocation,
+		HitLocation,//where we want the porjectile to end up
+		LaunchSpeed,
+		ESuggestProjVelocityTraceOption::DoNotTrace//do not line trace
+	);
+		//calculate the outlaunchvelocity
+		if (bHaveAimSolution)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AimDirection : %s"), *AimDirection.ToString());
+
+		//UE_LOG(LogTemp, Warning, TEXT("AimDirection : %s"), *AimDirection.ToString());
+		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		MoveBarrelTowards(AimDirection);
+
+
 	}//if no solution found do nothing
 }
 
 void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet)
 {
 	Barrel = BarrelToSet;
+}
+
+void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
+{
+	//Work out difference between current barrel rotation, and aim direction
+	auto BarrelRotator = Barrel->GetForwardVector().Rotation();//receive the roll pitch and yaw from the Barrel
+	auto AimAsRotator = AimDirection.Rotation();
+	auto DeltaRotator = AimAsRotator - BarrelRotator;
+	UE_LOG(LogTemp, Warning, TEXT("AimAsRotator: %s"), *DeltaRotator.ToString());
+	//Move the barrel the right amount this frame 
+	//given a max elevation speed and the frame time
 }

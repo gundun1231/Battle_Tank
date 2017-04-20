@@ -12,17 +12,18 @@ class BATTLE_TANKS_API UTankAimingComponent : public UActorComponent
 	GENERATED_BODY()
 private:
 	UStaticMeshComponent* Barrel = nullptr;
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
+	void MoveBarrelTowards(FVector AimDirection);
+
+
 
 public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	//TODO Add SetTurret reference
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 	void AimAt(FVector HitLocation, float LaunchSpeed);
 	//setter
 	void SetBarrelReference(UStaticMeshComponent *BarrelToSet);
+
+
 	
 };
